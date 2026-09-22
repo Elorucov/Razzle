@@ -1,1 +1,3 @@
-# ELOR.Razzle
+# Razzle (WIP)
+
+Under development.
