@@ -1,6 +1,7 @@
 using ELOR.Razzle.API;
 using ELOR.Razzle.Controllers;
 using ELOR.Razzle.Data;
+using ELOR.Razzle.Middlewares;
 using ELOR.Razzle.Services;
 using FluentValidation;
 using System.Text.Json;
@@ -42,12 +43,14 @@ namespace ELOR.Razzle
             builder.Services.AddSingleton(new RazzleDbContextFactory(dataDir));
             builder.Services.AddSingleton(new UsersRegistry(dataDir));
             builder.Services.AddSingleton<AccessTokenService>();
-            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddSingleton<AuthService>();
+            builder.Services.AddScoped<UserSession>();
 
             var app = builder.Build();
 
             app.UseMiddleware<APIExceptionMiddleware>();
             app.UseRouting();
+            app.UseMiddleware<AuthMiddleware>();
 
             app.MapControllers();
 

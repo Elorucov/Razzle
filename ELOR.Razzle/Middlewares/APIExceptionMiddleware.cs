@@ -1,6 +1,7 @@
-﻿using ELOR.Razzle.Services;
+﻿using ELOR.Razzle.API;
+using ELOR.Razzle.Services;
 
-namespace ELOR.Razzle.API
+namespace ELOR.Razzle.Middlewares
 {
     public sealed class APIExceptionMiddleware
     {
