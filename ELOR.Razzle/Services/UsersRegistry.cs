@@ -32,7 +32,7 @@ namespace ELOR.Razzle.Services
             }
         }
 
-        public bool TryGetId(string login, out string storageName)
+        public bool TryGetStorageName(string login, out string storageName)
         {
             lock (_lock)
             {
@@ -52,23 +52,6 @@ namespace ELOR.Razzle.Services
                 return storageName;
             }
         }
-
-        // Returns the existing id, or assigns and persists a new one.
-        //public uint GetOrAdd(string login)
-        //{
-        //    lock (_lock)
-        //    {
-        //        if (_users.TryGetValue(login, out var existing))
-        //        {
-        //            return existing;
-        //        }
-
-        //        var id = _nextId++;
-        //        _users[login] = id;
-        //        Save();
-        //        return id;
-        //    }
-        //}
 
         private void Save()
         {

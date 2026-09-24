@@ -12,6 +12,11 @@ namespace ELOR.Razzle.Controllers
             _service = service;
         }
 
+        public async Task<object> SignInAsync(SignInRequest request)
+        {
+            return await _service.SignInAsync(request);
+        }
+
         public async Task<object> SignUpAsync(SignUpRequest request)
         {
             return await _service.SignUpAsync(request);

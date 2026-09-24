@@ -41,6 +41,7 @@ namespace ELOR.Razzle
 
             builder.Services.AddSingleton(new RazzleDbContextFactory(dataDir));
             builder.Services.AddSingleton(new UsersRegistry(dataDir));
+            builder.Services.AddSingleton<AccessTokenService>();
             builder.Services.AddScoped<AuthService>();
 
             var app = builder.Build();
