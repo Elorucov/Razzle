@@ -1,26 +1,32 @@
 ﻿using ELOR.Razzle.Data;
+using ELOR.Razzle.DTO.Requests;
 
 namespace ELOR.Razzle.Services
 {
     public sealed class AuthService
     {
         private readonly RazzleDbContextFactory _dbFactory;
+        private readonly UsersRegistry _registry;
 
-        public AuthService(RazzleDbContextFactory dbFactory)
+        public AuthService(RazzleDbContextFactory dbFactory, UsersRegistry registry)
         {
             _dbFactory = dbFactory;
+            _registry = registry;
         }
 
-        public async Task<int> TestAsync()
+        // TODO: more restricted registration (captcha?)
+        public async Task<bool> SignUpAsync(SignUpRequest request)
         {
-            await Task.Yield();
-            return 42;
-        }
+            var username = request.Username;
+            if (_registry.Exists(username) || _dbFactory.Exists(username))
+            {
+                throw ServiceException.UserAlreadyExists();
+            }
 
-        public async Task<int> ThrowAsync()
-        {
-            await Task.Yield();
-            throw ServiceException.AuthFailed();
+            var userStorageName = _registry.Add(username);
+            using var db = _dbFactory.Create(userStorageName, request.Password);
+
+            return true;
         }
     }
 }

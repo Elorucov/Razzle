@@ -37,7 +37,10 @@ namespace ELOR.Razzle
             ValidatorOptions.Global.PropertyNameResolver = (_, member, _) =>
                 member is null ? null : char.ToLowerInvariant(member.Name[0]) + member.Name[1..];
 
+            builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+
             builder.Services.AddSingleton(new RazzleDbContextFactory(dataDir));
+            builder.Services.AddSingleton(new UsersRegistry(dataDir));
             builder.Services.AddScoped<AuthService>();
 
             var app = builder.Build();

@@ -1,5 +1,5 @@
-﻿using ELOR.Razzle.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using ELOR.Razzle.DTO.Requests;
+using ELOR.Razzle.Services;
 
 namespace ELOR.Razzle.Controllers
 {
@@ -12,14 +12,9 @@ namespace ELOR.Razzle.Controllers
             _service = service;
         }
 
-        public async Task<object> TestAsync()
+        public async Task<object> SignUpAsync(SignUpRequest request)
         {
-            return await _service.TestAsync();
-        }
-
-        public async Task<object> ThrowAsync()
-        {
-            return await _service.ThrowAsync();
+            return await _service.SignUpAsync(request);
         }
     }
 }

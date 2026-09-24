@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Attributes;
 
 namespace ELOR.Razzle.Controllers
 {

@@ -24,5 +24,8 @@ namespace ELOR.Razzle.Services
 
         public static ServiceException AuthFailed() =>
             new(ErrorCodes.InvalidLoginOrPassword, "Invalid login or password", StatusCodes.Status401Unauthorized);
+
+        public static ServiceException UserAlreadyExists() =>
+            new(ErrorCodes.UserAlreadyExists, "User with this username already exists", StatusCodes.Status409Conflict);
     }
 }

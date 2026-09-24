@@ -12,17 +12,17 @@ namespace ELOR.Razzle.Data
             _dataDir = dataDir;
         }
 
-        public string PathFor(string login) => Path.Combine(_dataDir, login.ToLowerInvariant() + ".db");
+        public string PathFor(string storageName) => Path.Combine(_dataDir, storageName + ".db");
 
-        public bool Exists(string login) => File.Exists(PathFor(login));
+        public bool Exists(string storageName) => File.Exists(PathFor(storageName));
 
         // Opens a context without touching the schema. The encryption key is applied via the
         // SQLite3MC "Password" connection-string keyword.
-        public RazzleDbContext Open(string login, string password)
+        public RazzleDbContext Open(string storageName, string password)
         {
             var connectionString = new SqliteConnectionStringBuilder
             {
-                DataSource = PathFor(login),
+                DataSource = PathFor(storageName),
                 Mode = SqliteOpenMode.ReadWriteCreate,
                 Password = password,
                 Pooling = false
@@ -36,9 +36,9 @@ namespace ELOR.Razzle.Data
         }
 
         // Opens a context and ensures the schema exists (used on sign-up).
-        public RazzleDbContext Create(string login, string password)
+        public RazzleDbContext Create(string storageName, string password)
         {
-            var context = Open(login, password);
+            var context = Open(storageName, password);
             context.Database.EnsureCreated();
             return context;
         }
