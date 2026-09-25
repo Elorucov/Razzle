@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace ELOR.Razzle.Services
+﻿namespace ELOR.Razzle.Services
 {
     public sealed class ServiceException : ApplicationException
     {

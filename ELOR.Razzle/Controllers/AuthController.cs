@@ -1,5 +1,4 @@
-﻿using ELOR.Razzle.Attributes;
-using ELOR.Razzle.DTO.Requests;
+﻿using ELOR.Razzle.DTO.Requests;
 using ELOR.Razzle.Services;
 
 namespace ELOR.Razzle.Controllers

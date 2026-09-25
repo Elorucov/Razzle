@@ -1,5 +1,4 @@
 ﻿using ELOR.Razzle.Data.Enums;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace ELOR.Razzle.Data.Entities
 {
