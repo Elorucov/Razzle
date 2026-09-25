@@ -14,9 +14,10 @@ namespace ELOR.Razzle.Controllers
         }
 
         [AuthRequired]
+        [Idempotent]
         public async Task<object> AddAsync(TagAddRequest request)
         {
-            return _service.AddAsync(request);
+            return await _service.AddAsync(request);
         }
 
         [AuthRequired]

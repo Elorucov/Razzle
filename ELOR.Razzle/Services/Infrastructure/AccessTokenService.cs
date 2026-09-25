@@ -1,7 +1,7 @@
 ﻿using Branca;
 using System.Text.Json;
 
-namespace ELOR.Razzle.Services
+namespace ELOR.Razzle.Services.Infrastructure
 {
     public sealed record TokenPayload(string Username, string Password);
 

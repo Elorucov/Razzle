@@ -1,4 +1,4 @@
-﻿namespace ELOR.Razzle.Services
+﻿namespace ELOR.Razzle.Services.Infrastructure
 {
     public sealed class ServiceException : ApplicationException
     {

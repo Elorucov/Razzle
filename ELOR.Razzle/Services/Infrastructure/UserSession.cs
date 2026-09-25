@@ -1,6 +1,6 @@
 ﻿using ELOR.Razzle.Data;
 
-namespace ELOR.Razzle.Services
+namespace ELOR.Razzle.Services.Infrastructure
 {
     public sealed class UserSession : IDisposable
     {

@@ -1,6 +1,7 @@
 ﻿using ELOR.Razzle.Data;
 using ELOR.Razzle.DTO.Requests;
 using ELOR.Razzle.DTO.Responses;
+using ELOR.Razzle.Services.Infrastructure;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 

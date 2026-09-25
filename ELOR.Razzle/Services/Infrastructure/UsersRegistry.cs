@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace ELOR.Razzle.Services
+namespace ELOR.Razzle.Services.Infrastructure
 {
     public sealed class UsersRegistry
     {

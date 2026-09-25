@@ -5,6 +5,7 @@ using ELOR.Razzle.Mappings;
 using ELOR.Razzle.Middlewares;
 using ELOR.Razzle.ModelBinders;
 using ELOR.Razzle.Services;
+using ELOR.Razzle.Services.Infrastructure;
 using FluentValidation;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -47,7 +48,10 @@ namespace ELOR.Razzle
             builder.Services.AddSingleton(new RazzleDbContextFactory(dataDir));
             builder.Services.AddSingleton(new UsersRegistry(dataDir));
             builder.Services.AddSingleton<AccessTokenService>();
-            builder.Services.AddSingleton<RazzleMapper>();
+            builder.Services.AddSingleton<RazzleMapper>(); 
+            
+            builder.Services.AddMemoryCache();
+            builder.Services.AddSingleton<IdempotencyStore>();
 
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddScoped<TagsService>();

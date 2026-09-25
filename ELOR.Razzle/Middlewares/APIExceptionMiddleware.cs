@@ -1,5 +1,5 @@
 ﻿using ELOR.Razzle.API;
-using ELOR.Razzle.Services;
+using ELOR.Razzle.Services.Infrastructure;
 
 namespace ELOR.Razzle.Middlewares
 {

@@ -2,6 +2,7 @@
 using ELOR.Razzle.DTO;
 using ELOR.Razzle.DTO.Requests;
 using ELOR.Razzle.Mappings;
+using ELOR.Razzle.Services.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace ELOR.Razzle.Services
