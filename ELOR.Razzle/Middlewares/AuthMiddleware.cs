@@ -23,9 +23,11 @@ namespace ELOR.Razzle.Middlewares
                 var payload = tokens.Decode(token);
                 if (payload is not null)
                 {
-                    users.TryGetStorageName(user.Username, out var storageName);
-                    var db = factory.Open(storageName, payload.Password);
-                    user.Set(payload.Username, db);
+                    if (users.TryGetStorageName(payload.Username, out var storageName))
+                    {
+                        var db = factory.Open(storageName, payload.Password);
+                        user.Set(payload.Username, db);
+                    }
                 }
             }
 

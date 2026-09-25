@@ -1,4 +1,5 @@
-﻿using ELOR.Razzle.DTO.Requests;
+﻿using ELOR.Razzle.Attributes;
+using ELOR.Razzle.DTO.Requests;
 using ELOR.Razzle.Services;
 
 namespace ELOR.Razzle.Controllers
@@ -12,10 +13,16 @@ namespace ELOR.Razzle.Controllers
             _service = service;
         }
 
-        // For testing enum conventions
+        [AuthRequired]
         public async Task<object> AddAsync(TagAddRequest request)
         {
-            return request;
+            return _service.AddAsync(request);
+        }
+
+        [AuthRequired]
+        public async Task<object> GetAsync()
+        {
+            return await _service.GetAsync();
         }
     }
 }
