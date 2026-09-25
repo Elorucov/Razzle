@@ -23,4 +23,15 @@ namespace ELOR.Razzle.Validators
             RuleFor(x => x.Password).NotEmpty().MinimumLength(6);
         }
     }
+
+    public sealed class TagAddRequestValidator : AbstractValidator<TagAddRequest>
+    {
+        public TagAddRequestValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .Length(0, 64);
+            RuleFor(x => x.Type).NotEmpty();
+        }
+    }
 }

@@ -2,6 +2,7 @@ using ELOR.Razzle.API;
 using ELOR.Razzle.Controllers;
 using ELOR.Razzle.Data;
 using ELOR.Razzle.Middlewares;
+using ELOR.Razzle.ModelBinders;
 using ELOR.Razzle.Services;
 using FluentValidation;
 using System.Text.Json;
@@ -24,12 +25,14 @@ namespace ELOR.Razzle
             builder.Services
                 .AddControllers(options =>
                 {
+                    options.ModelBinderProviders.Insert(0, new EnumModelBinderProvider());
                     options.Conventions.Add(new VKAPIStyleRouteConvention());
                     options.Filters.Add<ValidationFilter>();
                     options.Filters.Add<APIResultFilter>();
                 })
                 .AddJsonOptions(options =>
                 {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 });
@@ -43,7 +46,10 @@ namespace ELOR.Razzle
             builder.Services.AddSingleton(new RazzleDbContextFactory(dataDir));
             builder.Services.AddSingleton(new UsersRegistry(dataDir));
             builder.Services.AddSingleton<AccessTokenService>();
+
             builder.Services.AddSingleton<AuthService>();
+            builder.Services.AddSingleton<TagsService>();
+
             builder.Services.AddScoped<UserSession>();
 
             var app = builder.Build();

@@ -9,8 +9,8 @@
         public const int InvalidParameter = 100;
 
         public const int InvalidLoginOrPassword = 101;
-        public const int InvalidRegistrationKey = 102;
         public const int UserAlreadyExists = 103;
         public const int NotFound = 104;
+        public const int AlreadyExists = 105;
     }
 }

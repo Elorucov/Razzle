@@ -27,5 +27,11 @@ namespace ELOR.Razzle.Services
 
         public static ServiceException UserAlreadyExists() =>
             new(ErrorCodes.UserAlreadyExists, "User with this username already exists", StatusCodes.Status409Conflict);
+
+        public static ServiceException NotFound() =>
+            new(ErrorCodes.NotFound, "Not found", StatusCodes.Status404NotFound);
+
+        public static ServiceException AlreadyExists() =>
+            new(ErrorCodes.AlreadyExists, "Already exists", StatusCodes.Status400BadRequest);
     }
 }
