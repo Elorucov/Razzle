@@ -28,6 +28,7 @@ namespace ELOR.Razzle
                 .AddControllers(options =>
                 {
                     options.ModelBinderProviders.Insert(0, new EnumModelBinderProvider());
+                    options.ModelBinderProviders.Insert(0, new CommaSeparatedCollectionModelBinderProvider());
                     options.Conventions.Add(new VKAPIStyleRouteConvention());
                     options.Filters.Add<ValidationFilter>();
                     options.Filters.Add<APIResultFilter>();
@@ -55,6 +56,7 @@ namespace ELOR.Razzle
 
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddScoped<TagsService>();
+            builder.Services.AddScoped<NotesService>();
 
             builder.Services.AddScoped<UserSession>();
 

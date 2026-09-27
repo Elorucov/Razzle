@@ -9,4 +9,9 @@ namespace ELOR.Razzle.DTO.Requests
 
         public int RandomId { get; set; }
     }
+
+    public class TagsGetRequest
+    {
+        public List<uint> Ids { get; set; } = new List<uint>();
+    }
 }

@@ -33,13 +33,21 @@ namespace ELOR.Razzle.Services
             return tag.Id;
         }
 
-        public async Task<APIList<TagDTO>> GetAsync()
+        // TODO: filter by type
+        public async Task<APIList<TagDTO>> GetAsync(TagsGetRequest request)
+        {
+            var result = await GetInternalAsync(request.Ids);
+            return new APIList<TagDTO> { Count = result.count, Items = _mapper.ToDto(result.tags) };
+        }
+
+        public async Task<(int count, List<Tag> tags)> GetInternalAsync(List<uint> ids)
         {
             var query = _session.DB.Tags.AsNoTracking();
+            if (ids.Count > 0) query = query.Where(t => ids.Contains(t.Id));
 
             var count = await query.CountAsync();
             var items = await query.OrderBy(t => t.Id).ToListAsync();
-            return new APIList<TagDTO> { Count = count, Items = _mapper.ToDto(items) };
+            return (count, items);
         }
     }
 }

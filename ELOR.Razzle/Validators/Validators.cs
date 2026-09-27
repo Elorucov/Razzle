@@ -34,4 +34,14 @@ namespace ELOR.Razzle.Validators
             RuleFor(x => x.Type).NotEmpty();
         }
     }
+
+    public sealed class NoteCreateRequestValidator : AbstractValidator<NoteCreateRequest>
+    {
+        public NoteCreateRequestValidator()
+        {
+            RuleFor(x => x.Text)
+                .NotEmpty()
+                .Length(0, 2048);
+        }
+    }
 }

@@ -31,5 +31,8 @@
 
         public static ServiceException AlreadyExists() =>
             new(ErrorCodes.AlreadyExists, "Already exists", StatusCodes.Status400BadRequest);
+
+        public static ServiceException NoTagsFound() =>
+            new(ErrorCodes.NoTagsFound, "No any tags requested was found", StatusCodes.Status400BadRequest);
     }
 }

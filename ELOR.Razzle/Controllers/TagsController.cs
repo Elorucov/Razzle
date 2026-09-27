@@ -4,7 +4,7 @@ using ELOR.Razzle.Services;
 
 namespace ELOR.Razzle.Controllers
 {
-    public class TagsController : APIControllerBase
+    public sealed class TagsController : APIControllerBase
     {
         private readonly TagsService _service;
 
@@ -21,9 +21,9 @@ namespace ELOR.Razzle.Controllers
         }
 
         [AuthRequired]
-        public async Task<object> GetAsync()
+        public async Task<object> GetAsync(TagsGetRequest request)
         {
-            return await _service.GetAsync();
+            return await _service.GetAsync(request);
         }
     }
 }
