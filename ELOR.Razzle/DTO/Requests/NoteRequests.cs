@@ -12,4 +12,13 @@ namespace ELOR.Razzle.DTO.Requests
 
         public int RandomId { get; set; }
     }
+
+    public sealed class NotesGetRequest
+    {
+        public List<uint> TagIds { get; set; } = new List<uint>();
+        public uint TaskId { get; set; }
+
+        public int Offset { get; set; }
+        public int Count { get; set; }
+    }
 }

@@ -1,7 +1,9 @@
 ﻿using ELOR.Razzle.Data.Entities;
 using ELOR.Razzle.DTO.Requests;
+using ELOR.Razzle.DTO.Responses;
 using ELOR.Razzle.Mappings;
 using ELOR.Razzle.Services.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 
 namespace ELOR.Razzle.Services
@@ -79,6 +81,49 @@ namespace ELOR.Razzle.Services
 
             await _session.DB.SaveChangesAsync();
             return note.Id;
+        }
+
+        // TODO: make extension for paginated queries with "where" filters
+        // TODO: tasks
+        public async Task<NotesGetResponse> GetAsync(NotesGetRequest request)
+        {
+            var query = _session.DB.Notes.Include(n => n.TagNotes).AsNoTracking();
+
+            if (request.TagIds?.Count > 0) 
+                query = query.Where(n => n.TagNotes.Any(tn => request.TagIds.Contains(tn.TagId)));
+
+            if (request.TaskId > 0) query = query.Where(n => n.TaskId == request.TaskId);
+            int count = await query.CountAsync();
+
+            if (request.Offset > 0) query = query.Skip(request.Offset);
+            if (request.Count > 0) query = query.Take(request.Count);
+
+            var result = await query.ToListAsync();
+
+            // Tags
+
+            List<uint> mentionedTagIds = new List<uint>();
+
+            foreach (var note in result)
+            {
+                var tagIds = note.TagNotes.Select(n => n.TagId);
+                mentionedTagIds.AddRange(tagIds);
+            }
+            mentionedTagIds = mentionedTagIds.Distinct().ToList();
+
+            List<Tag> mentionedTags = null;
+            if (mentionedTagIds.Count > 0)
+            {
+                var tagsResult = await _tags.GetInternalAsync(mentionedTagIds);
+                mentionedTags = tagsResult.tags;
+            }
+
+            return new NotesGetResponse
+            {
+                Count = count,
+                Items = _mapper.ToDto(result),
+                Tags = _mapper.ToDto(mentionedTags)
+            };
         }
     }
 }

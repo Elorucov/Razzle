@@ -19,5 +19,11 @@ namespace ELOR.Razzle.Controllers
         {
             return await _service.CreateAsync(request);
         }
+
+        [AuthRequired]
+        public async Task<object> GetAsync(NotesGetRequest request)
+        {
+            return await _service.GetAsync(request);
+        }
     }
 }
