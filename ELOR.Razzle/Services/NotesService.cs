@@ -13,17 +13,18 @@ namespace ELOR.Razzle.Services
         private readonly UserSession _session;
         private readonly RazzleMapper _mapper;
         private readonly TagsService _tags;
+        private readonly TasksService _tasks;
 
-        public NotesService(UserSession session, RazzleMapper mapper, TagsService tags)
+        public NotesService(UserSession session, RazzleMapper mapper, TagsService tags, TasksService tasks)
         {
             _session = session;
             _mapper = mapper;
             _tags = tags;
+            _tasks = tasks;
         }
 
         // TODO:
-        // 1. check and write taskId after realizing TasksService
-        // 2. возможность прописать настоящее время createdAt в случае,
+        // 1. возможность прописать настоящее время createdAt в случае,
         //    если девайс попытался создать заметку оффлайн.
         public async Task<uint> CreateAsync(NoteCreateRequest request)
         {
@@ -40,12 +41,6 @@ namespace ELOR.Razzle.Services
                 };
             }
 
-            Note note = new Note
-            {
-                Text = request.Text,
-                CreatedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds()
-            };
-
             // Checking tags.
             // If request have tag ids, but no one are found in DB,
             // we throwing an exception
@@ -58,7 +53,21 @@ namespace ELOR.Razzle.Services
                 attachedTags = tagsResult.tags;
             }
 
-            // TODO: check taskId
+            // Checking task
+            uint? taskId = null;
+            if (request.TaskId > 0)
+            {
+                var task = await _tasks.GetInternalAsync(request.TaskId);
+                if (task == null) throw ServiceException.NoTaskFound();
+                taskId = task.Id;
+            }
+
+            Note note = new Note
+            {
+                Text = request.Text,
+                TaskId = taskId,
+                CreatedAt = DateTimeOffset.Now.ToUnixTimeMilliseconds()
+            };
 
             await _session.DB.Notes.AddAsync(note);
             
@@ -84,7 +93,6 @@ namespace ELOR.Razzle.Services
         }
 
         // TODO: make extension for paginated queries with "where" filters
-        // TODO: tasks
         public async Task<NotesGetResponse> GetAsync(NotesGetRequest request)
         {
             var query = _session.DB.Notes.Include(n => n.TagNotes).AsNoTracking();
@@ -118,11 +126,25 @@ namespace ELOR.Razzle.Services
                 mentionedTags = tagsResult.tags;
             }
 
+            // Tasks
+
+            var mentionedTaskIds = result
+                .Where(n => n.TaskId.HasValue).Select(n => n.TaskId.Value)
+                .Distinct().ToList();
+
+            List<TaskEntity> mentionedTasks = null;
+            if (mentionedTaskIds.Count > 0)
+            {
+                var tasksResult = await _tasks.GetInternalAsync(mentionedTaskIds);
+                mentionedTasks = tasksResult.tasks;
+            }
+
             return new NotesGetResponse
             {
                 Count = count,
                 Items = _mapper.ToDto(result),
-                Tags = _mapper.ToDto(mentionedTags)
+                Tags = _mapper.ToDto(mentionedTags),
+                Tasks = _mapper.ToDto(mentionedTasks)
             };
         }
     }

@@ -42,5 +42,13 @@ namespace ELOR.Razzle.Mappings
                 Amount = entity.Amount
             };
         }
+
+        [MapperIgnoreSource(nameof(TaskEntity.Flags))]
+        [MapperIgnoreSource(nameof(TaskEntity.CompletionNote))]
+        [MapperIgnoreSource(nameof(TaskEntity.Notes))]
+        [MapperIgnoreSource(nameof(TaskEntity.TagTasks))]
+        public partial TaskDTO ToDto(TaskEntity entity);
+
+        public partial List<TaskDTO> ToDto(List<TaskEntity> entities);
     }
 }

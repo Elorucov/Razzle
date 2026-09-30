@@ -44,4 +44,14 @@ namespace ELOR.Razzle.Validators
                 .Length(0, 2048);
         }
     }
+
+    public sealed class TaskCreateRequestValidator : AbstractValidator<TaskCreateRequest>
+    {
+        public TaskCreateRequestValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .Length(0, 128);
+        }
+    }
 }

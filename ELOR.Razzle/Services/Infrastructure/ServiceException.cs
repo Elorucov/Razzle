@@ -33,6 +33,9 @@
             new(ErrorCodes.AlreadyExists, "Already exists", StatusCodes.Status400BadRequest);
 
         public static ServiceException NoTagsFound() =>
-            new(ErrorCodes.NoTagsFound, "No any tags requested was found", StatusCodes.Status400BadRequest);
+            new(ErrorCodes.NoTagsFound, "No any tags with requested ids was found", StatusCodes.Status400BadRequest);
+
+        public static ServiceException NoTaskFound() =>
+            new(ErrorCodes.NoTaskFound, "No task with requested id was found", StatusCodes.Status400BadRequest);
     }
 }

@@ -14,5 +14,7 @@
         public const ushort AlreadyExists = 105;
 
         public const ushort NoTagsFound = 200;
+
+        public const ushort NoTaskFound = 300;
     }
 }

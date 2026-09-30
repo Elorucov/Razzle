@@ -56,6 +56,7 @@ namespace ELOR.Razzle
 
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddScoped<TagsService>();
+            builder.Services.AddScoped<TasksService>();
             builder.Services.AddScoped<NotesService>();
 
             builder.Services.AddScoped<UserSession>();
