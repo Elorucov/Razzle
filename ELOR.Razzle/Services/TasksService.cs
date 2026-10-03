@@ -1,5 +1,6 @@
 ﻿using ELOR.Razzle.Data.Entities;
 using ELOR.Razzle.DTO.Requests;
+using ELOR.Razzle.DTO.Responses;
 using ELOR.Razzle.Mappings;
 using ELOR.Razzle.Services.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,55 @@ namespace ELOR.Razzle.Services
 
             await _session.DB.SaveChangesAsync();
             return task.Id;
+        }
+
+        // TODO: make extension for paginated queries with "where" filters
+        public async Task<TasksGetResponse> GetAsync(TasksGetRequest request)
+        {
+            var query = _session.DB.Tasks
+                .Include(t => t.TagTasks)
+                .Include(t => t.CompletionNote).AsNoTracking();
+
+            if (request.TagIds?.Count > 0)
+                query = query.Where(n => n.TagTasks.Any(tn => request.TagIds.Contains(tn.TagId)));
+
+            int count = await query.CountAsync();
+
+            if (request.Offset > 0) query = query.Skip(request.Offset);
+            if (request.Count > 0) query = query.Take(request.Count);
+
+            var result = await query.ToListAsync();
+
+            // Tags
+
+            List<uint> mentionedTagIds = new List<uint>();
+
+            foreach (var note in result)
+            {
+                var tagIds = note.TagTasks.Select(n => n.TagId);
+                mentionedTagIds.AddRange(tagIds);
+            }
+            mentionedTagIds = mentionedTagIds.Distinct().ToList();
+
+            List<Tag> mentionedTags = null;
+            if (mentionedTagIds.Count > 0)
+            {
+                var tagsResult = await _tags.GetInternalAsync(mentionedTagIds);
+                mentionedTags = tagsResult.tags;
+            }
+
+            // Notes that mentioned in completed notes
+
+            List<Note> mentionedNotes = result.SelectMany(t => t.Notes ?? [])
+                .DistinctBy(n => n.Id).ToList();
+
+            return new TasksGetResponse
+            {
+                Count = count,
+                Items = _mapper.ToDto(result),
+                Tags = _mapper.ToDto(mentionedTags),
+                Notes = _mapper.ToDto(mentionedNotes)
+            };
         }
 
         public async Task<TaskEntity> GetInternalAsync(uint id)

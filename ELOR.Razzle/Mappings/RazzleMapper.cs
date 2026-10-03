@@ -1,4 +1,5 @@
 ﻿using ELOR.Razzle.Data.Entities;
+using ELOR.Razzle.Data.Enums;
 using ELOR.Razzle.DTO;
 using Riok.Mapperly.Abstractions;
 
@@ -43,11 +44,17 @@ namespace ELOR.Razzle.Mappings
             };
         }
 
-        [MapperIgnoreSource(nameof(TaskEntity.Flags))]
-        [MapperIgnoreSource(nameof(TaskEntity.CompletionNote))]
-        [MapperIgnoreSource(nameof(TaskEntity.Notes))]
-        [MapperIgnoreSource(nameof(TaskEntity.TagTasks))]
-        public partial TaskDTO ToDto(TaskEntity entity);
+        public TaskDTO ToDto(TaskEntity entity)
+        {
+            return new TaskDTO
+            {
+                Id = entity.Id,
+                CreatedAt = entity.CreatedAt,
+                Name = entity.Name,
+                CompletionNoteId = entity.CompletionNoteId,
+                IsCompleted = entity.Flags.HasFlag(TaskFlags.IsCompleted)
+            };
+        }
 
         public partial List<TaskDTO> ToDto(List<TaskEntity> entities);
     }

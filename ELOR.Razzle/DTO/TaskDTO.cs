@@ -6,5 +6,7 @@
         public uint Id { get; init; }
         public long CreatedAt { get; init; }
         public string Name { get; init; }
+        public bool IsCompleted { get; init; }
+        public uint? CompletionNoteId { get; init; }
     }
 }
